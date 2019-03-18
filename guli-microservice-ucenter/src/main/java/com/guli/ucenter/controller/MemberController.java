@@ -5,10 +5,7 @@ import com.guli.common.vo.R;
 import com.guli.ucenter.util.JwtUtils;
 import com.guli.ucenter.vo.LoginInfoVo;
 import io.jsonwebtoken.Claims;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -23,15 +20,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/ucenter/member")
 public class MemberController {
 
+    @PostMapping("info/{token}")
     public R getInfoByToken(@PathVariable String token){
+
         Claims claims = JwtUtils.checkJWT(token);
-        String nickname = (String) claims.get("nickname");
+        String nickname = (String)claims.get("nickname");
         String avatar = (String)claims.get("avatar");
         String id = (String)claims.get("id");
         LoginInfoVo loginInfoVo = new LoginInfoVo();
         loginInfoVo.setId(id);
         loginInfoVo.setAvatar(avatar);
         loginInfoVo.setNickname(nickname);
+
+        return R.ok().data("loginInfo", loginInfoVo);
     }
 
 }
